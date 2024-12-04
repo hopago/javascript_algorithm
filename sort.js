@@ -231,12 +231,14 @@ const items = [
     { key: "겨울", value: 20 },
 ]
 
+// 오름차순
 console.log(items.sort((a, b) => {
-    if (a.value > b.value) {
+    if (a.value > b.value) { // a의 인덱스를 b보다 높여야
         return 1;
     }
-    if (a.value < b.value) {
+    if (a.value < b.value) { // a의 인덱스를 b보다 낮춰야
         return -1;
     }
+    // a idx === b idx
     return 0;
 }))
