@@ -130,3 +130,79 @@ function dfs(maze, position = [0, 0], path = []) {
 
     return null;
 }
+
+/** 너비 우선 탐색(BFS)
+ * 가까운 곳부터 탐색하여 범위를 넓히는 탐색 기법
+ */
+
+const graph = {
+    A: ["B", "C"],
+    B: ["C", "D"],
+    C: ["D", "E", "F"],
+    D: ["B"],
+    E: ["C", "G"],
+    F: ["C", "E"],
+    G: ["E", "H"],
+    H: ["G"]
+};
+
+/*
+function bfs(graph, startNode) {
+    const visited = {}; // 방문 정점 저장 객체
+    const quene = []; // 탐색 정점 저장 큐
+
+    visited[startNode] = true; // 시작 정점을 방문 처리
+    quene.push(startNode); // 시작 정점을 큐에 추가
+
+    while (quene.length > 0) {
+        const node = quene.shift(); // 큐에서 정점을 하나씩 추출
+
+        console.log(node);
+
+        const adjacentNodes = graph[node];
+        for (let i = 0; i < adjacentNodes.length; i++) {
+            const adjacentNode = adjacentNodes[i];
+            if (!visited[adjacentNode]) {
+                visited[adjacentNode] = true;
+                quene.push(adjacentNode);
+            }
+        }
+    }
+}
+*/
+
+console.clear();
+
+function bfs(graph, startNode, targetNode) {
+    const visited = {}; // 방문 정점 저장 객체
+    const quene = []; // 탐색 정점 저장 큐
+    const distances = {};
+
+    visited[startNode] = true; // 시작 정점을 방문 처리
+    quene.push(startNode); // 시작 정점을 큐에 추가
+    distances[startNode] = 0;
+
+    while (quene.length > 0) {
+        const node = quene.shift(); // 큐에서 정점을 하나씩 추출
+
+        console.log(`Visiting node: ${node}, Distance: ${distances[node]}`)
+
+        if (node === targetNode) {
+            return distances[node]
+        }
+
+        const adjacentNodes = graph[node];
+        for (let i = 0; i < adjacentNodes.length; i++) {
+            const adjacentNode = adjacentNodes[i];
+            if (!visited[adjacentNode]) {
+                visited[adjacentNode] = true;
+                quene.push(adjacentNode);
+                distances[adjacentNode] = distances[node] + 1;
+            }
+        }
+    }
+
+    return null;
+}
+
+bfs(graph, "A", "H");
