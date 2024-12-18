@@ -4,7 +4,7 @@
 */
 
 // 버블 정렬 O(n^2)
-const bubbleSort = (array) => {
+function bubbleSort(array) {
     for (let i = 0; i < array.length - 1; i++) {
         for (let j = i + 1; j < array.length; j++) {
             if (array[j - 1] > array[j]) {
@@ -16,6 +16,85 @@ const bubbleSort = (array) => {
     }
     return array;
 }
+
+function bubbleSort(array) {
+    array.map(_ => array.map((e2, i) => {
+        if (array[i] > array[i + 1]) {
+            array[i] = array[i + 1];
+            array[i + 1] = e2;
+        }
+    }))
+}
+
+// 예제 1
+let scores = [
+    { name: "철수", score: 85 },
+    { name: "영희", score: 97 },
+    { name: "민수", score: 21 },
+    { name: "혜진", score: 49 },
+    { name: "진수", score: 67 },
+]
+
+const sortedScore = (array) => {
+    for (let i = 0; i < array.length - 1; i++) {
+        for (let j = 1; j < array.length; j++) {
+            if (array[j - 1].score > array[j].score) {
+                const temp = array[j]
+                array[j] = array[j - 1];
+                array[j - 1] = temp;
+            }
+        }
+    }
+    return array;
+}
+
+console.log(sortedScore(scores));
+
+console.log(scores.sort((a, b) => a.score - b.score));
+
+// 예제 2
+let restaurants = [
+    { name: "음식점A", totalOrders: 300, avgRating: 4.5, likes: 200, distance: 5 },
+    { name: "음식점B", totalOrders: 250, avgRating: 4.2, likes: 180, distance: 25 },
+    { name: "음식점C", totalOrders: 400, avgRating: 4.7, likes: 250, distance: 15 },
+    { name: "음식점D", totalOrders: 200, avgRating: 4.1, likes: 320, distance: 10 },
+    { name: "음식점E", totalOrders: 350, avgRating: 4.4, likes: 220, distance: 5 },
+]
+
+const weights = {
+    totalOrders: 0.2,
+    avgRating: 0.3,
+    likes: 0.2,
+    distance: 0.3
+}
+
+function calculateScore(restaurant) {
+    const maxDistance = 20;
+    if (restaurant.distance > maxDistance) return null;
+    let score = weights.totalOrders * restaurant.totalOrders + 
+    weights.avgRating * restaurant.avgRating 
+    + weights.likes * restaurant.likes 
+    + weights.distance * (maxDistance - restaurant.distance)
+    return score;
+}
+
+function bubbleSort(array) {
+    let len = array.length;
+    for (let i = len - 1; i >= 0; i--) {
+        for (let j = 1; j <= i; j++) {
+            let score1 = calculateScore(array[j - 1]);
+            let score2 = calculateScore(array[j])
+            if (score1 < score2) {
+                let temp = array[j - 1]
+                array[j - 1] = array[j]
+                array[j] = temp
+            }
+        }
+    }
+    return array;
+}
+
+console.log(bubbleSort(restaurants));
 
 // 선택 정렬 O(n^2)
 const selectionSort = (array) => {
