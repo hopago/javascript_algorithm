@@ -135,7 +135,7 @@ function dfs(maze, position = [0, 0], path = []) {
  * 가까운 곳부터 탐색하여 범위를 넓히는 탐색 기법
  */
 
-const graph = {
+const graph0 = {
     A: ["B", "C"],
     B: ["C", "D"],
     C: ["D", "E", "F"],
@@ -147,7 +147,7 @@ const graph = {
 };
 
 /*
-function bfs(graph, startNode) {
+function bfs(graph0, startNode) {
     const visited = {}; // 방문 정점 저장 객체
     const quene = []; // 탐색 정점 저장 큐
 
@@ -205,4 +205,61 @@ function bfs(graph, startNode, targetNode) {
     return null;
 }
 
-bfs(graph, "A", "H");
+bfs(graph0, "A", "H");
+
+/** 최소 신장 트리
+ * 간선을 위한 알고리즘, 네트워크나 전력망 등에 사용
+ * 실생활 예시: 전기를 어떤 경로로 보내면 저렴할까?
+ * 대표 알고리즘: 프림(PRIM) 크루스칼(KRUSKAL) 알고리즘
+ */
+
+// 최소화된 간선 가중치를 구하는 것
+const graph1 = [ // 가중치 0이란? - graph[0][2] === 0, 간선이 없다
+    [0, 2, 0, 6, 0],
+    [2, 0, 3, 8, 5],
+    [0, 3, 0, 0, 7],
+    [6, 8, 0, 0, 9],
+    [0, 5, 7, 9, 0]
+]
+
+console.log(primMst(graph1));
+
+function primMst(graph) {
+    const parent = []; // 각 노드의 부모노드를 저장
+    const key = [];
+    const visited = [];
+    const { length } = graph;
+
+    for (let i = 0; i < length; i++) {
+        key[i] = Infinity; // 최소 간선 가중치를 저장해두는 배열
+        visited[i] = false; // 이미 방문했는지 여부
+    }
+
+    key[0] = 0;
+    parent[0] = -1;
+
+    for (let count = 0; count < length - 1; count++) {
+        let u = minKey(key, visited); // u: 노드 x에 대한 기준
+        visited[u] = true;
+        for (let v = 0; v < length; v++) {
+            if (graph[u][v] && visited[v] === false && graph[u][v] < key[v]) {
+                parent[v] = u;
+                key[v] = graph[u][v]
+            }
+        }
+    }
+
+    return parent;
+}
+
+function minKey(key, visited) {
+    let min = Infinity;
+    let minIndex;
+    for (let v = 0; v < key.length; v++) {
+        if (visited[v] === false && key[v] < min) {
+            min = key[v];
+            minIndex = v;
+        }
+    }
+    return minIndex;
+}
