@@ -71,10 +71,10 @@ const weights = {
 function calculateScore(restaurant) {
     const maxDistance = 20;
     if (restaurant.distance > maxDistance) return null;
-    let score = weights.totalOrders * restaurant.totalOrders + 
-    weights.avgRating * restaurant.avgRating 
-    + weights.likes * restaurant.likes 
-    + weights.distance * (maxDistance - restaurant.distance)
+    let score = weights.totalOrders * restaurant.totalOrders +
+        weights.avgRating * restaurant.avgRating
+        + weights.likes * restaurant.likes
+        + weights.distance * (maxDistance - restaurant.distance)
     return score;
 }
 
@@ -112,6 +112,88 @@ const selectionSort = (array) => {
     }
     return array;
 }
+
+// 예제 1
+/**
+ * 국가를 메달 수와 대회 참여 수에 따라 정렬합니다.
+ * 선택 정렬 알고리즘 사용
+ * @param {Array} countries - 국가 배열. 각 객체는 gold, silver, bronze, games 속성을 포함.
+ * @returns {Array} 정렬된 국가 배열
+ */
+function rankCountries(countries) {
+    const len = countries.length;
+
+    for (let i = 0; i < len; i++) {
+        let maxIndex = i;
+
+        for (let j = i + 1; j < len; j++) {
+            if (
+                // 금메달 비교
+                countries[j].gold > countries[maxIndex].gold ||
+                // 은메달 비교
+                (countries[j].gold === countries[maxIndex].gold &&
+                    countries[j].silver > countries[maxIndex].silver) ||
+                // 동메달 비교
+                (countries[j].gold === countries[maxIndex].gold &&
+                    countries[j].silver === countries[maxIndex].silver &&
+                    countries[j].bronze > countries[maxIndex].bronze) ||
+                // 대회 참여 수 비교
+                (countries[j].gold === countries[maxIndex].gold &&
+                    countries[j].silver === countries[maxIndex].silver &&
+                    countries[j].bronze === countries[maxIndex].bronze &&
+                    countries[j].games < countries[maxIndex].games)
+            ) {
+                maxIndex = j;
+            }
+        }
+
+        // i번째 요소와 maxIndex 요소를 교환
+        if (maxIndex !== i) {
+            const temp = countries[i];
+            countries[i] = countries[maxIndex];
+            countries[maxIndex] = temp;
+        }
+    }
+
+    return countries;
+}
+
+const countries = [
+    { name: "USA", gold: 10, silver: 5, bronze: 2, games: 3 },
+    { name: "China", gold: 10, silver: 5, bronze: 3, games: 4 },
+    { name: "Japan", gold: 8, silver: 6, bronze: 5, games: 2 },
+    { name: "Germany", gold: 10, silver: 5, bronze: 3, games: 2 },
+];
+
+console.log(rankCountries(countries));
+
+// 예제 2
+let potion = [5, 8, 6, 1, 9, 3];
+
+for (let i = 0; i < potion.length; i++) {
+    let maxIdx = i;
+    for (let j = i + 1; j < potion.length; j++) {
+        if (potion[j] > potion[maxIdx]) {
+            maxIdx = j;
+        }
+    }
+    [potion[i], potion[maxIdx]] = [potion[maxIdx], potion[i]]
+}
+
+let sum = 0;
+let result = [];
+
+potion.some((effect, i) => {
+    sum = 0;
+    result = [];
+    for (let j = i; j < potion.length; j++) {
+        sum += potion[j];
+        result.push(potion[j])
+        if (sum < 15 && j === potion.length - 1) break;
+        else if (sum === 15) return true;
+        else if (sum > 15) break;
+    }
+})
 
 // 삽입 정렬 O(n^2)
 // 이미 정렬이 끝난 상태라면 O(n)
