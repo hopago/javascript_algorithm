@@ -209,6 +209,106 @@ const insertSort = (array) => {
     return array;
 }
 
+// 예제 1
+let units = [
+    { name: "질럿", power: 16, },
+    { name: "드라군", power: 24, },
+    { name: "하이템플러", power: 0, },
+    { name: "다크템플러", power: 40, },
+    { name: "리버", power: 100, },
+    { name: "아칸", power: 30, },
+]
+
+function insertionSort(units) {
+    for (let i = 1; i < units.length; i++) {
+        let key = units[i]
+        let j = i - 1;
+        while (j >= 0 && units[i].attack > key.attack) {
+            units[j + 1] = units[j]
+            j = j - 1;
+        }
+        units[j + 1] = key;
+    }
+}
+
+// 예제 2
+const BATTLE_CRUISER = {
+    MAX_HP: 500,
+    SIZE: "대형",
+};
+
+const MY_MINERAL = 500;
+const MY_GAS = 500;
+
+units = [
+    { name: "드라군", mineral: 125, gas: 50, attackSpeed: 1.25, damage: 20, type: "폭발형" },
+    { name: "마린", mineral: 50, gas: 0, attackSpeed: 0.625, damage: 6, type: "일반형" },
+    { name: "골리앗", mineral: 100, gas: 50, attackSpeed: 0.916, damage: 20, type: "폭발형" },
+    { name: "스카웃", mineral: 275, gas: 125, attackSpeed: 0.916, damage: 28, type: "폭발형" },
+    { name: "뮤탈리스크", mineral: 100, gas: 100, attackSpeed: 1.25, damage: 20, type: "일반형" },
+    { name: "히드라리스크", mineral: 75, gas: 25, attackSpeed: 0.625, damage: 10, type: "폭발형" },
+]
+
+function unitsCanBeProduced(unit) {
+    const mineralBased = Math.floor(MY_MINERAL / unit.mineral);
+    const gasBased = Math.floor(MY_GAS / unit.gas)
+
+    return Math.min(mineralBased, gasBased);
+}
+
+function damageCalculator(unit, target) {
+    const damageTypes = {
+        '일반형': {
+            '대형': 1,
+            '중형': 1,
+            '소형': 1
+        },
+        '진동형': {
+            '대형': 0.25,
+            '중형': 0.5,
+            '소형': 1
+        },
+        '폭발형': {
+            '대형': 1,
+            '중형': 0.75,
+            '소형': 0.5,
+        }
+    }
+
+    return unit.damage * damageTypes[unit.type][target.SIZE]
+}
+
+function timeToKill(unit, target) {
+    const unitsProduced = unitsCanBeProduced(unit)
+    const damagePerAttack = unitsProduced * damageCalculator(unit, target)
+    return target.MAX_HP / damagePerAttack * unit.attackSpeed
+}
+
+const timeToKillCache = {};
+
+function getTimeToKillWithCache(unit, target) {
+  if (!timeToKillCache[unit.name]) {
+    timeToKillCache[unit.name] = timeToKill(unit, target);
+  }
+  return timeToKillCache[unit.name];
+}
+
+for (let i = 1; i < units.length; i++) {
+  let key = units[i];
+  let j = i - 1;
+  while (
+    j >= 0 &&
+    getTimeToKillWithCache(units[j], BATTLE_CRUISER) >
+      getTimeToKillWithCache(key, BATTLE_CRUISER)
+  ) {
+    units[j + 1] = units[j];
+    j = j - 1;
+  }
+  units[j + 1] = key;
+}
+
+console.log(units)
+
 // 합병 정렬 O(n log n)
 
 const array = [14, 78, 3, 68];
