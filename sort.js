@@ -287,24 +287,24 @@ function timeToKill(unit, target) {
 const timeToKillCache = {};
 
 function getTimeToKillWithCache(unit, target) {
-  if (!timeToKillCache[unit.name]) {
-    timeToKillCache[unit.name] = timeToKill(unit, target);
-  }
-  return timeToKillCache[unit.name];
+    if (!timeToKillCache[unit.name]) {
+        timeToKillCache[unit.name] = timeToKill(unit, target);
+    }
+    return timeToKillCache[unit.name];
 }
 
 for (let i = 1; i < units.length; i++) {
-  let key = units[i];
-  let j = i - 1;
-  while (
-    j >= 0 &&
-    getTimeToKillWithCache(units[j], BATTLE_CRUISER) >
-      getTimeToKillWithCache(key, BATTLE_CRUISER)
-  ) {
-    units[j + 1] = units[j];
-    j = j - 1;
-  }
-  units[j + 1] = key;
+    let key = units[i];
+    let j = i - 1;
+    while (
+        j >= 0 &&
+        getTimeToKillWithCache(units[j], BATTLE_CRUISER) >
+        getTimeToKillWithCache(key, BATTLE_CRUISER)
+    ) {
+        units[j + 1] = units[j];
+        j = j - 1;
+    }
+    units[j + 1] = key;
 }
 
 console.log(units)
@@ -362,6 +362,44 @@ const merge = (leftArr, rightArr) => {
     }
     return merged;
 };
+
+// 에제 1
+const VIPSeats = ["D5", "A7", "B3", "A1", "D4", "B1", "A2", "D1", "C1", "C5"];
+
+function mergeSort(array) {
+    if (array.length <= 1) {
+        return array;
+    }
+
+    const mid = Math.floor(array.length / 2);
+    const left = array.slice(0, mid);
+    const right = array.slice(mid);
+
+    return merge(mergeSort(left), mergeSort(right))
+}
+
+function merge(left, right) {
+    let result = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+
+    while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+            result.push(left[leftIndex])
+            leftIndex++;
+        } else {
+            result.push(right[rightIndex]);
+            rightIndex++;
+        }
+    }
+
+    return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex))
+}
+
+console.log(mergeSort(VIPSeats));
+
+// 예제 2
+
 
 // 퀵 정렬 O(n log n) - 최악: O(n^2)
 
