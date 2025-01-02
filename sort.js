@@ -48,10 +48,6 @@ const sortedScore = (array) => {
     return array;
 }
 
-console.log(sortedScore(scores));
-
-console.log(scores.sort((a, b) => a.score - b.score));
-
 // 예제 2
 let restaurants = [
     { name: "음식점A", totalOrders: 300, avgRating: 4.5, likes: 200, distance: 5 },
@@ -93,8 +89,6 @@ function bubbleSort(array) {
     }
     return array;
 }
-
-console.log(bubbleSort(restaurants));
 
 // 선택 정렬 O(n^2)
 const selectionSort = (array) => {
@@ -164,8 +158,6 @@ const countries = [
     { name: "Japan", gold: 8, silver: 6, bronze: 5, games: 2 },
     { name: "Germany", gold: 10, silver: 5, bronze: 3, games: 2 },
 ];
-
-console.log(rankCountries(countries));
 
 // 예제 2
 let potion = [5, 8, 6, 1, 9, 3];
@@ -307,8 +299,6 @@ for (let i = 1; i < units.length; i++) {
     units[j + 1] = key;
 }
 
-console.log(units)
-
 // 합병 정렬 O(n log n)
 
 const array = [14, 78, 3, 68];
@@ -328,7 +318,7 @@ let tempArray = [];
 
 // 연산이 끝날 때 까지 mergeSort()가 잡혀있기 때문에 공간 복잡도가 증가한다 - 메모리 사용량이 늘어난다
 
-const mergeSort = (array) => {
+function mergeSort(array) {
     if (array.length <= 1) return array;
 
     const mid = Math.floor(array.length / 2);
@@ -339,7 +329,7 @@ const mergeSort = (array) => {
     return merge(sortedLeft, sortedRight)
 }
 
-const merge = (leftArr, rightArr) => {
+function merge(leftArr, rightArr) {
     let merged = [];
     let leftIndex = 0;
     let rightIndex = 0;
@@ -396,14 +386,9 @@ function merge(left, right) {
     return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex))
 }
 
-console.log(mergeSort(VIPSeats));
-
-// 예제 2
-
-
 // 퀵 정렬 O(n log n) - 최악: O(n^2)
 
-const quickSort = (array) => {
+function quickSort (array) {
     if (array.length <= 1) return array;
 
     const pivot = array[0];
@@ -415,6 +400,59 @@ const quickSort = (array) => {
 
     return [...quickSort(left), pivot, ...quickSort(right)]
 }
+
+// 예제 1
+const MAX_FOOD_COUNT = 4;
+const PROTEIN_LIST = [5, 12, 22, 36, 47, 49, 59];
+const PRICE_LIST = [3000, 4100, 4500, 5000, 5600, 5900]
+let budget = 15000;
+
+let ratioList = PROTEIN_LIST.map((protein, index) => {
+    return {
+        index,
+        ratio: protein / PRICE_LIST[index]
+    }
+})
+
+function quickSort(array, left = 0, right = array.length - 1) {
+    if (left < right) {
+        let pivot = partition(array, left, right);
+        quickSort(array, left, pivot - 1)
+        quickSort(array, pivot + 1, right)
+    }
+    return array;
+}
+
+function partition(array, left, right) {
+    let pivot = array[right].ratio;
+    let i = left;
+    for (let j = left; j < right; j++) {
+        if (array[j].ratio > pivot) {
+            [array[i], array[j]] = [array[j], array[i]]
+            i++;
+        }
+    }
+    [array[i], array[right]] = [array[right], array[i]]
+    return i;
+}
+
+quickSort(ratioList)
+
+let totalProtein = 0;
+let foodCount = 0;
+
+for (let i = 0; i < ratioList.length; i++) {
+    if (budget >= PRICE_LIST[ratioList[i].index]) {
+        budget -= PRICE_LIST[ratioList[i].index];
+        totalProtein += PROTEIN_LIST[ratioList[i].index];
+        foodCount++
+        if (foodCount === MAX_FOOD_COUNT) break;
+    }
+}
+
+console.log("토탈 프로틴:")
+console.log(ratioList);
+console.log(totalProtein);
 
 // 힙 정렬
 
@@ -492,17 +530,14 @@ function radixSort(arr) {
             const digit = Math.floor(num / exp) % 10;
             count[digit]++;
         })
-        console.log("count: ", count);
         for (let i = 1; i < count.length; i++) {
             count[i] += count[i - 1]
         }
-        console.log("updatedCount: ", count);
         for (let i = arr.length - 1; i >= 0; i--) {
             const digit = Math.floor(arr[i] / exp) % 10;
             output[count[digit] - 1] = arr[i];
             count[digit]--;
         }
-        console.log("finalizedCount: ", count);
         output.forEach((num, i) => {
             arr[i] = num
         })
@@ -514,9 +549,6 @@ function radixSort(arr) {
     }
     return arr;
 }
-
-console.clear()
-console.log(radixSort([25, 36, 1, 3, 100, 1002, 39, 121]))
 
 /** .sort()
  * 크롬 - TIM SORT
