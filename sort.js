@@ -595,6 +595,33 @@ function radixSort(arr) {
     return arr;
 }
 
+// 예제 1
+let students = [
+    { grade: 1, class: 1, number: 1, studyTime: 120 },
+    { grade: 1, class: 1, number: 2, studyTime: 150 },
+    { grade: 1, class: 2, number: 1, studyTime: 1200 },
+    { grade: 1, class: 2, number: 2, studyTime: 1230 },
+    { grade: 1, class: 1, number: 3, studyTime: 1280 },
+    { grade: 1, class: 3, number: 1, studyTime: 1310 },
+    { grade: 1, class: 2, number: 3, studyTime: 10 },
+    { grade: 1, class: 1, number: 4, studyTime: 190 },
+    { grade: 1, class: 1, number: 5, studyTime: 12035 },
+];
+
+function radixSort(arr, key) {
+    const maxNum = Math.max(...arr.map(obj => obj[key])) * 10;
+    let divisor = 10;
+    while (divisor < maxNum) {
+        let buckets = [...Array(10)].map(() => []);
+        for (let num of arr) {
+            buckets[Math.floor((num[key] % divisor) / (divisor / 10))].push(num)
+            arr = [].concat.apply([], buckets)
+            divisor *= 10;
+        }
+    }
+    return arr;
+}
+
 /** .sort()
  * 크롬 - TIM SORT
  * 사파리 - MERGE SORT
